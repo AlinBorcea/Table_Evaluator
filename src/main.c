@@ -3,6 +3,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "table.h"
+
 #define BUFFER_SIZE 32
 #define CLS() system("cls")
 
@@ -15,23 +17,6 @@ enum InputOption {
     CLS,
 };
 
-void read_str(char input[BUFFER_SIZE]) {
-    char ch = '0';
-    int i = 0;
-
-    while (i < BUFFER_SIZE - 1) {
-        ch = getch();
-        if (ch == '\r') break;
-
-        printf("%c", ch);
-        input[i] = (char) ch;
-        i++;
-    }
-
-    printf("\n");
-    input[i] = '\0';
-}
-
 void print_menu() {
     printf("exit -> 0\n");
     printf("menu -> 1\n");
@@ -42,7 +27,7 @@ void print_menu() {
 }
 
 void run_main_loop() {
-    char input[BUFFER_SIZE];
+    //char input[BUFFER_SIZE];
     int option = MENU;
     
     while (option != EXIT) {
@@ -61,7 +46,7 @@ void run_main_loop() {
                 break;
 
             case READ: 
-                read_str(input);
+                //read_str(input);
                 break;
 
             case CLS:
@@ -81,7 +66,22 @@ void run_main_loop() {
 }
 
 int main() {
-    run_main_loop();
+    //run_main_loop();
+    int err = 0;
+
+    Table *table = table_new(2, 3, 16);
+    if (!table) {
+        printf("table is null");
+        return 1;
+    }
+
+    err = read_cell(table, 0, 0);
+    if (err) {
+        printf("error reading cell\n");
+        return 1;
+    }
+
+    drop_table(&table);
 
     return 0;
 }

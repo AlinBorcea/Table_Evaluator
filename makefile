@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-g -pedantic -Wall -std=c99
 SRCS=$(wildcard src/*.c)
-OBJS=$(patsubst src/*.c, obj/*.o, $(SRCS))
+OBJS=$(patsubst src/%.c, obj/%.o, $(SRCS))
 BIN=table.exe
 
 all: $(BIN)
