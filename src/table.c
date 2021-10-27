@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
+#include <string.h>
 
 typedef struct Cell {
     char *content;
@@ -20,7 +21,7 @@ Cell *create_cells(int rows, int columns, int column_width) {
     if (!cells) return NULL;
 
     for (int i = 0; i < rows * columns; i++) {
-        cells[i].content = (char*) malloc(sizeof(char) * column_width);
+        cells[i].content = (char*) calloc(column_width, sizeof(char));
         if (!cells[i].content) {
             i--;
             while (i >= 0) {
@@ -89,4 +90,16 @@ int read_cell(Table *table, int row, int column) {
     printf("\n");
     (*cell).content[i] = '\0';
     return 0;
+}
+
+char *get_cell_content(Table *table, int row, int column) {
+    if (row >= (*table).rows || column >= (*table).columns) return NULL;
+
+    return (*table).cells[row * (*table).columns + column].content;
+}
+
+void print_lengths(Table *table) {
+    for (int i = 0; i < (*table).rows * (*table).columns; i++) {
+        printf("%d ", strlen((*table).cells[i].content));
+    }
 }

@@ -9,4 +9,8 @@ void drop_table(Table **table);
 
 int read_cell(Table *table, int row, int column);
 
+char *get_cell_content(Table *table, int row, int column);
+
+void print_lengths(Table *table);
+
 #endif

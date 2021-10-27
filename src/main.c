@@ -26,9 +26,11 @@ void print_menu() {
     printf("clear -> 5\n");
 }
 
-void run_main_loop() {
-    //char input[BUFFER_SIZE];
+void run_main_loop(Table *table) {
     int option = MENU;
+    int row = 0;
+    int col = 0;
+    int err = 0;
     
     while (option != EXIT) {
         switch (option) {
@@ -39,14 +41,17 @@ void run_main_loop() {
                 print_menu(); 
                 break;
 
-            case SEL: 
+            case SEL:
+                printf("row = "); scanf("%d", &row);
+                printf("col = "); scanf("%d", &col);
                 break;
 
-            case PRINT: 
+            case PRINT:
+                print_lengths(table);
                 break;
 
             case READ: 
-                //read_str(input);
+                err = read_cell(table, row, col);
                 break;
 
             case CLS:
@@ -58,6 +63,10 @@ void run_main_loop() {
                 break;
         }
 
+        if (err != 0) {
+            printf("error\n");
+        }
+
         printf("read option\n");
         option = getch() - 48;
     }
@@ -65,23 +74,28 @@ void run_main_loop() {
     CLS();
 }
 
-int main() {
-    //run_main_loop();
-    int err = 0;
+int main(int argc, char **argv) {
+    if (argc < 4) {
+        printf("too few args\n");
+        return 1;
+    }
 
-    Table *table = table_new(2, 3, 16);
+    int rows = atoi(argv[1]);
+    int columns = atoi(argv[2]);
+    int width = atoi(argv[3]);
+
+    if (rows <= 0 || columns <= 0 || width <= 0) {
+        printf("args are integers gt 0\n");
+        return 1;
+    }
+
+    Table *table = table_new(rows, columns, width);
     if (!table) {
         printf("table is null");
         return 1;
     }
 
-    err = read_cell(table, 0, 0);
-    if (err) {
-        printf("error reading cell\n");
-        return 1;
-    }
-
+    run_main_loop(table);
     drop_table(&table);
-
     return 0;
 }
